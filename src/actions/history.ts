@@ -25,7 +25,7 @@ export async function runHistory(context: ActionContext): Promise<void> {
       ...entries.map((entry, index) => ({
         value: String(index),
         name: `${index + 1}. ${entry.method} ${entry.path}`,
-        description: `${entry.status} · ${entry.durationMs} ms · ${formatDate(entry.timestamp)}`,
+        description: `${entry.status === null ? `Sin respuesta (${entry.failureKind ?? 'fallo'})` : `HTTP ${entry.status}`} · ${entry.durationMs} ms · ${formatDate(entry.timestamp)}`,
       })),
       { value: 'back', name: 'Volver al menú', description: 'No repetir ninguna petición' },
     ],
