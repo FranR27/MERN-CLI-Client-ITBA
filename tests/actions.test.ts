@@ -24,14 +24,16 @@ describe('ejecución compartida de peticiones', () => {
     assert.equal(fake.historyEntries[0]?.status, 200);
   });
 
-  it('no registra en el historial cuando falla la conexión', async () => {
-    const fake = createFakeContext({ results: [failedRequest()] });
-
-    const response = await executeRequest(fake.context, { method: 'GET', path: '/health' });
-
+  it('registra los intentos fallidos sin guardar datos sensibles', async () => {
+    const fake = createFakeContext({ results: [failedRequest({ kind: 'timeout', durationMs: 10000 })] });
+    const response = await executeRequest(fake.context, { method: 'POST', path: '/partidas', body: { capitulo: 1 } });
     assert.equal(response, undefined);
-    assert.equal(fake.historyEntries.length, 0);
+    assert.equal(fake.historyEntries.length, 1);
+    assert.equal(fake.historyEntries[0]?.status, null);
+    assert.equal(fake.historyEntries[0]?.failureKind, 'timeout');
+    assert.equal(fake.historyEntries[0]?.path, '/partidas');
     assert.equal(fake.failures.length, 1);
+    assert.equal(JSON.stringify(fake.historyEntries).includes('capitulo'), false);
   });
 });
 
