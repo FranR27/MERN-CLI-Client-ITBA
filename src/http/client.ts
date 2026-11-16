@@ -51,7 +51,7 @@ export function buildUrl(baseUrl: string, path: string): string {
   // URL normaliza segmentos "." y "..", incluidos sus equivalentes codificados.
   // Rechazamos cualquier ruta que salga del prefijo de API configurado.
   const prefix = basePath || '';
-  if (url.origin !== base.origin || (url.pathname !== prefix && !url.pathname.startsWith(`${prefix}/`))) {
+  if (url.origin !== base.origin || (prefix !== '' && url.pathname !== prefix && !url.pathname.startsWith(`${prefix}/`))) {
     throw new Error('La ruta no puede salir del prefijo de la API configurado.');
   }
 
