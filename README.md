@@ -34,7 +34,8 @@ Consultá [la especificación funcional](docs/spec.md) y [el plan de implementac
 - **Constructor REST:** GET, POST, PUT y DELETE sobre cualquier ruta relativa; los bodies de POST y PUT se validan como JSON antes de enviarse.
 - **Respuestas:** spinner, estado HTTP coloreado (2xx verde, 4xx amarillo, 5xx rojo), duración en milisegundos y JSON indentado y resaltado.
 - **Errores:** se distinguen errores HTTP, de conexión, de timeout (10 s) y respuestas que no son JSON.
-- **Historial:** últimas 10 peticiones con método, ruta, estado, duración y fecha. Permite repetirlas; como los bodies no se guardan, al repetir un POST o PUT se solicitan de nuevo.
+- **Historial:** últimos 10 intentos, incluidos errores de conexión y timeout, con método, ruta, estado HTTP o tipo de fallo, duración y fecha. Permite repetirlos; como los bodies no se guardan, al repetir un POST o PUT se solicitan de nuevo.
+- **Seguridad de rutas:** las rutas personalizadas deben permanecer dentro del prefijo configurado (por ejemplo, `/api`); se rechazan intentos de salir mediante segmentos `..`.
 
 ## Requisitos
 
