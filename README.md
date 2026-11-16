@@ -1,12 +1,21 @@
 # MERN-CLI-Client-ITBA
 
-Cliente REST interactivo para terminal (TUI), desarrollado como actividad de ITBA.
+Cliente REST interactivo para terminal (TUI), desarrollado como actividad de ITBA y orientado a probar el backend de **CASO 404** sin depender del frontend React.
 
 ## Objetivo
 
-Permitir que un desarrollador configure la URL base de su propia API Node.js/Express, se autentique mediante JWT y ejecute peticiones HTTP desde una interfaz de terminal.
+Configurar una API, ejecutar operaciones HTTP desde una interfaz de terminal, visualizar respuestas y tiempos de respuesta, y consultar el historial de peticiones.
 
-> Este proyecto implementa el cliente. No incluye ni necesita desarrollar un backend propio: se conecta a una API existente.
+Este repositorio contiene únicamente el cliente TUI. El backend se mantiene en el repositorio independiente [test_JuegoDetective](https://github.com/FranR27/test_JuegoDetective).
+
+## Backend de referencia
+
+- URL local predeterminada: `http://localhost:3001/api`.
+- Comprobación: `GET /health`.
+- Rutas específicas: creación y consulta de partidas, registro de evidencias y validación de acertijos.
+- El backend actual no implementa usuarios, login ni JWT. La autenticación no forma parte del alcance inicial de esta integración.
+
+La TUI también tendrá un constructor REST genérico para enviar GET, POST, PUT y DELETE. Que un método esté disponible en el cliente no significa que el backend tenga una ruta que lo implemente.
 
 ## Estado
 
@@ -15,7 +24,7 @@ En etapa de especificación y planificación (SDD). Consultá [la especificació
 ## Requisitos
 
 - Node.js 20 o superior.
-- Una API compatible para probar autenticación y endpoints protegidos.
+- Backend de CASO 404 en ejecución para probar las operaciones integradas.
 
 ## Desarrollo
 
