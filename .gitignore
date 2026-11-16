@@ -1,0 +1,8 @@
+node_modules/
+.env
+.env.*
+.mern-cli.json
+.mern-cli.local.json
+.mern-cli-token.json
+.mern-cli-history.json
+.DS_Store
