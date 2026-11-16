@@ -32,6 +32,21 @@ export async function executeRequest(
 
   if (!result.ok) {
     context.ui.showFailure(result.failure);
+
+    try {
+      context.history.add({
+        method: options.method,
+        path,
+        status: null,
+        failureKind: result.failure.kind,
+        durationMs: result.failure.durationMs,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : 'error desconocido';
+      context.print(theme.warning(`No se pudo guardar el historial: ${detail}`));
+    }
+
     return undefined;
   }
 
