@@ -12,7 +12,8 @@ export interface ExecuteRequestOptions {
 
 /**
  * Ejecuta una petición, muestra la respuesta o el error y registra la entrada
- * en el historial cuando hubo una respuesta HTTP.
+ * en el historial tanto si hubo respuesta HTTP como si falló el transporte.
+ * Nunca persiste bodies, respuestas ni mensajes técnicos que puedan contener datos sensibles.
  */
 export async function executeRequest(
   context: ActionContext,
