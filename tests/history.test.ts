@@ -79,6 +79,17 @@ describe('historial de peticiones', () => {
     }
   });
 
+  it('acepta entradas de fallos de transporte sin estado HTTP', () => {
+    const directory = createTempDir();
+    try {
+      const history = createHistoryStore(directory);
+      history.add({ method: 'GET', path: '/health', status: null, failureKind: 'connection', durationMs: 4, timestamp: new Date().toISOString() });
+      const loaded = createHistoryStore(directory).list();
+      assert.equal(loaded[0]?.status, null);
+      assert.equal(loaded[0]?.failureKind, 'connection');
+    } finally { rmSync(directory, { recursive: true, force: true }); }
+  });
+
   it('devuelve copias para no exponer su estado interno', () => {
     const directory = createTempDir();
 
