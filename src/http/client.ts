@@ -45,10 +45,17 @@ export function buildUrl(baseUrl: string, path: string): string {
     throw new Error('La URL base debe usar http o https.');
   }
 
-  const url = `${baseUrl.replace(/\/+$/, '')}${relativePath}`;
-  new URL(url); // Valida el resultado final.
+  const basePath = base.pathname.replace(/\/+$/, '');
+  const url = new URL(`${base.origin}${basePath}${relativePath}`);
 
-  return url;
+  // URL normaliza segmentos "." y "..", incluidos sus equivalentes codificados.
+  // Rechazamos cualquier ruta que salga del prefijo de API configurado.
+  const prefix = basePath || '';
+  if (url.origin !== base.origin || (url.pathname !== prefix && !url.pathname.startsWith(`${prefix}/`))) {
+    throw new Error('La ruta no puede salir del prefijo de la API configurado.');
+  }
+
+  return url.toString();
 }
 
 function technicalDetail(error: unknown): string | undefined {
