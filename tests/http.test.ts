@@ -54,6 +54,9 @@ describe('construcción de URLs', () => {
     assert.equal(buildUrl('http://localhost:3001/api/', '/health'), 'http://localhost:3001/api/health');
     assert.equal(buildUrl('http://localhost:3001/api', 'health'), 'http://localhost:3001/api/health');
     assert.throws(() => buildUrl('no-es-url', '/health'), /no es válida/);
+    assert.throws(() => buildUrl('http://localhost:3001/api', '/../admin'), /salir del prefijo/);
+    assert.throws(() => buildUrl('http://localhost:3001/api', '/%2e%2e/admin'), /salir del prefijo/);
+    assert.equal(buildUrl('http://localhost:3001', '/health'), 'http://localhost:3001/health');
   });
 });
 
