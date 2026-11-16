@@ -3,15 +3,15 @@
 Este plan traduce los requisitos de [spec.md](spec.md) en entregas pequeñas y verificables. La especificación es la fuente de verdad: no agregar funcionalidades fuera del alcance sin actualizarla primero.
 
 ## Fase 1 — Base del proyecto
-- [ ] Definir stack y dependencias de la TUI.
-- [ ] Crear estructura modular de carpetas.
-- [ ] Configurar scripts de desarrollo y validación.
-- [ ] Preparar configuración local y exclusiones de Git.
+- [x] Definir stack y dependencias de la TUI.
+- [x] Crear estructura modular de carpetas.
+- [x] Configurar scripts de desarrollo y validación.
+- [x] Preparar configuración local y exclusiones de Git.
 
 ## Fase 2 — Configuración e interfaz
 - [ ] Implementar carga/solicitud de URL base (sugerida: `http://localhost:3001/api`).
 - [ ] Permitir consultar y modificar la URL base.
-- [ ] Implementar menú principal y navegación.
+- [x] Implementar menú principal y navegación.
 - [ ] Añadir flujos de entrada y validación.
 
 ## Fase 3 — Cliente HTTP y operaciones de CASO 404
@@ -36,6 +36,10 @@ Este plan traduce los requisitos de [spec.md](spec.md) en entregas pequeñas y v
 - [ ] Comprobar que las rutas ilustrativas no implementadas no se presenten como operaciones integradas.
 - [ ] Verificar ausencia de secretos y datos locales en Git.
 - [ ] Documentar instalación, configuración y uso.
+
+## Registro de verificación
+
+- **2026-11-16 — Fase 1 y menú principal (spec de CASO 404):** verificados `npm run typecheck`, `npm test`, `npm run build`, `npm run dev` y la versión compilada en Windows con Node 24. Se probó con una terminal real: navegación con flechas por las nueve opciones, Enter para ejecutar cada opción, retorno al menú, opción Salir y cancelación con Ctrl+C. Las operaciones de CASO 404, la configuración de URL, el constructor REST y el historial permanecen pendientes.
 
 ## Reglas de trabajo
 1. Leer `README.md`, `docs/spec.md` y este plan antes de implementar.
