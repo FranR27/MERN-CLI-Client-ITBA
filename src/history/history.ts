@@ -9,7 +9,10 @@ export const HISTORY_LIMIT = 10;
 export interface HistoryEntry {
   method: HttpMethod;
   path: string;
-  status: number;
+  /** null indica que no se recibió una respuesta HTTP (conexión/timeout). */
+  status: number | null;
+  /** Tipo de fallo de transporte; no se guardan bodies ni credenciales. */
+  failureKind?: 'connection' | 'timeout' | 'invalid-request';
   durationMs: number;
   timestamp: string;
 }
