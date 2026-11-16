@@ -28,7 +28,11 @@ function isHistoryEntry(value: unknown): value is HistoryEntry {
     isRecord(value) &&
     isHttpMethod(value.method) &&
     typeof value.path === 'string' &&
-    typeof value.status === 'number' &&
+    (typeof value.status === 'number' || value.status === null) &&
+    (value.failureKind === undefined ||
+      value.failureKind === 'connection' ||
+      value.failureKind === 'timeout' ||
+      value.failureKind === 'invalid-request') &&
     typeof value.durationMs === 'number' &&
     typeof value.timestamp === 'string'
   );
