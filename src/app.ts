@@ -5,18 +5,19 @@ import { MENU_OPTIONS, selectMenuOption, type SelectMenuOption } from './ui/menu
 import { theme } from './ui/theme.js';
 
 export interface AppDependencies {
+  context: ActionContext;
   selectMenu?: SelectMenuOption;
   handlers?: Partial<ActionHandlers>;
-  print?: ActionContext['print'];
 }
 
 /**
  * Bucle principal: muestra el menú, ejecuta la acción elegida y vuelve al menú
  * hasta que el usuario selecciona "Salir".
  */
-export async function runApp(dependencies: AppDependencies = {}): Promise<void> {
+export async function runApp(dependencies: AppDependencies): Promise<void> {
+  const { context } = dependencies;
   const selectMenu = dependencies.selectMenu ?? selectMenuOption;
-  const print = dependencies.print ?? ((message: string) => console.log(message));
+  const print = context.print;
 
   const defaultHandlers = createActionHandlers();
   const handlers: ActionHandlers = {
@@ -32,6 +33,7 @@ export async function runApp(dependencies: AppDependencies = {}): Promise<void> 
   };
 
   print(renderBanner());
+  print(theme.muted(`API: ${context.config.getBaseUrl()}`));
   print('');
 
   for (;;) {
@@ -41,9 +43,9 @@ export async function runApp(dependencies: AppDependencies = {}): Promise<void> 
       break;
     }
 
-    await handlers[action]({ print });
+    await handlers[action](context);
     print('');
   }
 
-  print(theme.muted('Sesión finalizada. ¡Hasta luego!'));
+  print(theme.muted('Aplicación finalizada. ¡Hasta luego!'));
 }

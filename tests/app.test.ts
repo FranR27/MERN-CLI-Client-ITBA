@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import type { MenuActionId } from '../src/actions/types.js';
 import { runApp } from '../src/app.js';
+import { createFakeContext, okResponse } from './helpers.js';
 
 function createSelectSequence(sequence: MenuActionId[]) {
   let index = 0;
@@ -16,10 +17,11 @@ function createSelectSequence(sequence: MenuActionId[]) {
 
 describe('bucle principal de la aplicación', () => {
   it('ejecuta la acción elegida y vuelve al menú hasta elegir Salir', async () => {
+    const fake = createFakeContext();
     const calls: string[] = [];
-    const printed: string[] = [];
 
     await runApp({
+      context: fake.context,
       selectMenu: createSelectSequence(['health', 'validateRiddle', 'exit']),
       handlers: {
         health: () => {
@@ -29,19 +31,21 @@ describe('bucle principal de la aplicación', () => {
           calls.push('validateRiddle');
         },
       },
-      print: (message) => printed.push(message),
     });
 
+    const output = fake.printed.join('\n');
     assert.deepEqual(calls, ['health', 'validateRiddle']);
-    assert.match(printed.join('\n'), /CASO 404/);
-    assert.match(printed.join('\n'), /Sesión finalizada/);
+    assert.match(output, /CASO 404/);
+    assert.match(output, /API: http:\/\/localhost:3001\/api/);
+    assert.match(output, /Aplicación finalizada/);
   });
 
   it('no ejecuta acciones al elegir Salir como primera opción', async () => {
+    const fake = createFakeContext();
     const calls: string[] = [];
-    const printed: string[] = [];
 
     await runApp({
+      context: fake.context,
       selectMenu: createSelectSequence(['exit']),
       handlers: {
         health: () => {
@@ -69,35 +73,40 @@ describe('bucle principal de la aplicación', () => {
           calls.push('config');
         },
       },
-      print: (message) => printed.push(message),
     });
 
     assert.deepEqual(calls, []);
-    assert.match(printed.join('\n'), /Hasta luego/);
+    assert.match(fake.printed.join('\n'), /Hasta luego/);
   });
 
-  it('usa los handlers por defecto cuando no se inyectan', async () => {
-    const printed: string[] = [];
-
-    await runApp({
-      selectMenu: createSelectSequence(['request', 'exit']),
-      print: (message) => printed.push(message),
+  it('usa las acciones reales cuando no se inyectan handlers', async () => {
+    const fake = createFakeContext({
+      selects: ['GET'],
+      inputs: ['/health'],
+      results: [okResponse()],
     });
 
-    assert.match(printed.join('\n'), /próxima etapa/);
-    assert.match(printed.join('\n'), /RF-08/);
+    await runApp({
+      context: fake.context,
+      selectMenu: createSelectSequence(['request', 'exit']),
+    });
+
+    assert.equal(fake.requests[0]?.method, 'GET');
+    assert.equal(fake.requests[0]?.path, '/health');
   });
 
   it('propaga los errores de una acción para que no se oculten', async () => {
+    const fake = createFakeContext();
+
     await assert.rejects(
       runApp({
+        context: fake.context,
         selectMenu: createSelectSequence(['health', 'exit']),
         handlers: {
           health: () => {
             throw new Error('falló la acción');
           },
         },
-        print: () => undefined,
       }),
       /falló la acción/,
     );

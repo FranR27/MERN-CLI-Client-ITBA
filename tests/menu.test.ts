@@ -68,14 +68,4 @@ describe('registro de acciones', () => {
       );
     }
   });
-
-  it('las acciones pendientes avisan que se implementarán más adelante', async () => {
-    const handlers = createActionHandlers();
-    const messages: string[] = [];
-
-    await handlers.config({ print: (message) => messages.push(message) });
-
-    assert.match(messages.join('\n'), /próxima etapa/);
-    assert.match(messages.join('\n'), /RF-01/);
-  });
 });

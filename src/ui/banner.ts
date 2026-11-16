@@ -10,7 +10,7 @@ export function renderBanner(): string {
     line,
     `  ${theme.title(APP_NAME)}`,
     `  ${theme.subtitle(APP_SUBTITLE)}`,
-    `  ${theme.muted('ITBA · SDD · Etapa 1')}`,
+    `  ${theme.muted('ITBA · SDD · CASO 404')}`,
     line,
   ].join('\n');
 }

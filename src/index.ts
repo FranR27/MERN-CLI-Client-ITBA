@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { runApp } from './app.js';
+import { createAppContext } from './context.js';
 import { theme } from './ui/theme.js';
 
 /** @inquirer lanza ExitPromptError cuando el usuario cancela con Ctrl+C. */
@@ -16,7 +17,8 @@ async function main(): Promise<void> {
   }
 
   try {
-    await runApp();
+    const context = await createAppContext();
+    await runApp({ context });
   } catch (error) {
     if (isPromptCancellation(error)) {
       console.log('');
